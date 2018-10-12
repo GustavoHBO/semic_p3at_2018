@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import cv2
 import sys
 import math
@@ -5,6 +7,7 @@ import logging as log
 import datetime as dt
 import numpy as np
 from time import sleep
+import socket
 
 cascPath = "/usr/local/share/OpenCV/haarcascades/haarcascade_frontalface_default.xml"
 faceCascade = cv2.CascadeClassifier(cascPath)
@@ -20,7 +23,21 @@ width=0
 divCol=5
 propPixel = 1
 
+ip_serv = '127.0.0.1'
+port    = 3333
 
+
+socket_client = None
+
+
+def envMensServico(strMsg):
+    #global socket_client
+    addr = ((ip_serv,port)) 
+    socket_client = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+    socket_client.connect(addr) 
+    socket_client.send(str(strMsg));
+    print('Conectado ao servico')
+    socket_client.close()
 
 def identificarColuna(x):
     global width
@@ -106,6 +123,7 @@ exibi()
 c = colunaMaisFaces()
 print "Coluna mais face: " + str(c)
 print(obterAngulo(c))
+envMensServico(obterAngulo(c))
 cv2.imwrite("img_detect.jpg", frame)
 
 # Libera a camera
