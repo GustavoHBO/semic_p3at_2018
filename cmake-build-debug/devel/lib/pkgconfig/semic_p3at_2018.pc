@@ -1,0 +1,8 @@
+prefix=/home/gaut/Documents/Workspace/ROS/catkin_ws/src/semic_p3at_2018/cmake-build-debug/devel
+
+Name: semic_p3at_2018
+Description: Description of semic_p3at_2018
+Version: 1.8.1
+Cflags: 
+Libs: -L/home/gaut/Documents/Workspace/ROS/catkin_ws/src/semic_p3at_2018/cmake-build-debug/devel/lib 
+Requires: 

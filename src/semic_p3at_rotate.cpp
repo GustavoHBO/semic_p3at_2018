@@ -1,70 +1,68 @@
 #include <ros/ros.h>
 #include <geometry_msgs/Twist.h>
 #include <nav_msgs/Odometry.h>
-#include <std_msgs/Int16.h>
+#include <std_msgs/Float32.h>
+#include <std_msgs/String.h>
 #include <sstream>
 
-#define RAD 57.2958
+#define PI 3.1415926535897
 
-void rotateCallback(const std_msgs::Int16 angle){
-    int i = 0;
-    
+double t0 = 0, t1 = 0;
+
+double abs(double data){
+    if(data < 0){
+        data = data * -1;
+    }
+    return data;
+}
+
+void rotateCallback(const std_msgs::Float32 angle){
+    double speedValue = 10;
+    double speed = speedValue;
+    double relative_angle = 0;
+    double angular_speed = 0;
+    double current_angle = 0;
+
     ros::NodeHandle n;
-    ros::Publisher pub = n.advertise<geometry_msgs::Twist>("/RosAria/cmd_vel", 1000);
-    ros::Rate loop_rate(1);
-    while (ros::ok()){
-        geometry_msgs::Twist twist;
-        ROS_INFO("Rotating");
+    ros::Publisher pub = n.advertise<geometry_msgs::Twist>("/RosAria/cmd_vel", 1);
+    ros::Publisher pub2 = n.advertise<std_msgs::String>("/semic/p3at/status", 1);
+    geometry_msgs::Twist twist;
+    angular_speed = speed*2*PI/360;
+    relative_angle = abs(angle.data)*2*PI/360;
+
+    t0 = ros::Time::now().toSec();
+
+    if(angle.data > 0){
+        speed = -angular_speed;
+    } else if(angle.data < 0){
+        speed = angular_speed;
+    }
+
+    while(current_angle < relative_angle && ros::ok()){
         twist.angular.x = 0;
         twist.angular.y = 0;
-        twist.angular.z = (angle.data/RAD);
+        twist.angular.z = speed;
         pub.publish(twist);
-        loop_rate.sleep();
-        break;
+        t1 = ros::Time::now().toSec();
+        current_angle = angular_speed*(t1-t0);
     }
+    twist.angular.x = 0;
+    twist.angular.y = 0;
+    twist.angular.z = 0;
+    pub.publish(twist);
+    std_msgs::String msg;
+    std::stringstream ss;
+    ss << "done";
+    msg.data = ss.str();
+    pub2.publish(msg);
 }
 
 int main(int argc, char **argv){
-    /**
-     * The ros::init() function needs to see argc and argv so that it can perform
-     * any ROS arguments and name remapping that were provided at the command line.
-     * For programmatic remappings you can use a different version of init() which takes
-     * remappings directly, but for most command-line programs, passing argc and argv is
-     * the easiest way to do it.  The third argument to init() is the name of the node.
-     *
-     * You must call one of the versions of ros::init() before using any other
-     * part of the ROS system.
-     */
+    
     ros::init(argc, argv, "semic_p3at_rotate");
 
-    /**
-     * NodeHandle is the main access point to communications with the ROS system.
-     * The first NodeHandle constructed will fully initialize this node, and the last
-     * NodeHandle destructed will close down the node.
-     */
     ros::NodeHandle n;
+    ros::Subscriber sub = n.subscribe("/semic/p3at/rotate", 1, &rotateCallback);
 
-    /**
-     * The subscribe() call is how you tell ROS that you want to receive messages
-     * on a given topic.  This invokes a call to the ROS
-     * master node, which keeps a registry of who is publishing and who
-     * is subscribing.  Messages are passed to a callback function, here
-     * called chatterCallback.  subscribe() returns a Subscriber object that you
-     * must hold on to until you want to unsubscribe.  When all copies of the Subscriber
-     * object go out of scope, this callback will automatically be unsubscribed from
-     * this topic.
-     *
-     * The second parameter to the subscribe() function is the size of the message
-     * queue.  If messages are arriving faster than they are being processed, this
-     * is the number of messages that will be buffered up before beginning to throw
-     * away the oldest ones.
-     */
-    ros::Subscriber sub = n.subscribe("/semic/p3at/rotate", 1000, rotateCallback);
-
-    /**
-     * ros::spin() will enter a loop, pumping callbacks.  With this version, all
-     * callbacks will be called from within this thread (the main one).  ros::spin()
-     * will exit when Ctrl-C is pressed, or the node is shutdown by the master.
-     */
     ros::spin();
 }

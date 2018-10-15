@@ -1,0 +1,8 @@
+prefix=/usr/local
+
+Name: semic_p3at_2018
+Description: Description of semic_p3at_2018
+Version: 1.8.1
+Cflags: 
+Libs: -L/usr/local/lib 
+Requires: 
