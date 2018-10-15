@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/gaut/Documents/Workspace/ROS/catkin_ws/src/semic_p3at_2018/cmake-build-debug/devel/setup.sh
