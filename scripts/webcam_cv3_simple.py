@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-#import cv2
+import cv2
 import rospy
 import subprocess as system
 from std_msgs.msg import Int16
@@ -12,6 +12,12 @@ import datetime as dt
 import numpy as np
 from time import sleep
 import socket
+import time
+from threading import Thread
+
+timeout = 3 # tres segundos
+anguloGiro = 0.0
+
 
 class FaceDetection:
     def __init__(self, cascPath):
@@ -100,13 +106,15 @@ class FaceDetection:
         self.exibi()
         c = self.colunaMaisFaces()
         print "Coluna mais face: " + str(c)
-        print(self.obterAngulo(c))
+        angulo = self.obterAngulo(c)
+        print(angulo)
         #server.enviarMensagem(obterAngulo(c))
         cv2.imwrite("img_detect.jpg", frame)
 
         # Libera a camera
         self.video_capture.release()
         cv2.destroyAllWindows()
+        return angulo
 
         
 
@@ -115,10 +123,17 @@ class Cliente:
     def __init__(self, ip, porta):
         self.porta = porta
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+        self.socket.settimeout(3)
         self.socket.connect((ip, porta))
+        self.socket.settimeout(10)
+        self.process = None
 
     def enviarMensagem(self, msg):
         self.socket.send(msg+'\n')
+
+    def fechar(self):
+        self.socket.close()
+
 class ROS_Publisher:
     def __init__(self):
         self.pub = rospy.Publisher('/semic/p3at/rotate', Int16, queue_size=1)
@@ -133,6 +148,10 @@ class ROS_Listener:
         rospy.init_node('raspberry_p3at_publish', anonymous=True)
         rospy.Subscriber('/semic/p3at/status', String, callback)
         rospy.spin()
+    def publisher(self, valor):
+        rospy.loginfo('Publicando' + str(valor))
+        msg = String(valor)
+        self.pub.publish(msg)
 
 # Mostra resultado na tela
 #cv2.imshow('Video', frame)
@@ -140,17 +159,44 @@ class ROS_Listener:
 # Display the resulting frame
 #cv2.imshow('Video', frame)
 
+
+pub = ROS_Publisher()
+
+
 def callback(data):
+    global anguloGiro
+    cliente = Cliente('127.0.0.1', 3333)
+    face = FaceDetection('/usr/local/share/OpenCV/haarcascades/haarcascade_frontalface_default.xml')
+
+    anguloGiro = face.capturar()
+    pub.publisher(anguloGiro)
+    print('Valor de angulo publicado')
     rospy.loginfo(rospy.get_caller_id() + 'I heard %s', data.data)
-    server.enviarMensagem(str(data.data))
+    print('Aguardando por ' + str(timeout) + ' segundos')
+    time.sleep(timeout)
+    print ('Iniciando apresentacao')
+    cliente.enviarMensagem(str(data.data))
 
-def main(): 
-    pub = ROS_Publisher()
-    sub = ROS_Listener(callback)
-    server = Cliente('127.0.0.1', 3333)
-    print('Main')
+    msg = ''
+    while True:
+            #aceita uma mensagem
+            try:
+                msg = cliente.socket.recv(1024)
+                if msg == 'END': break
+            except socket.timeout:
+                break
+    print('Apresentacao finalizada')
+    pub.publisher(anguloGiro*(-1))
+    #sub.publisher('END')
+    cliente.fechar()
 
-if __name__ == '__main__':
-    main()
+sub = ROS_Listener(callback)
+
+
+
+
+
+def listenerMsg(msg):
+    print msg
 
 
