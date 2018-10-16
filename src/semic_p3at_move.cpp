@@ -10,6 +10,7 @@ double t0 = 0;
 double t1 = 0;
 
 void moveCallback(std_msgs::Float32 dist){
+    ROS_INFO("Chegou");
     distance = dist.data;
     t0 = ros::Time::now().toSec();
     t1 = t0;
@@ -52,10 +53,7 @@ int main(int argc, char** argv){
             ss << "done";
             msg.data = ss.str();
             pub2.publish(msg);
-        } else {
-            twist.linear.x = 0;
-            pub.publish(twist);
-        }
+        } 
         ros::spinOnce();
     }
     return 0;

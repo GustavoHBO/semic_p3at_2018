@@ -17,11 +17,13 @@ double abs(double data){
 }
 
 void rotateCallback(const std_msgs::Float32 angle){
-    double speedValue = 10;
+    double speedValue = 50;
     double speed = speedValue;
     double relative_angle = 0;
     double angular_speed = 0;
     double current_angle = 0;
+
+    ROS_INFO("Rodando");
 
     ros::NodeHandle n;
     ros::Publisher pub = n.advertise<geometry_msgs::Twist>("/RosAria/cmd_vel", 1);
@@ -33,7 +35,7 @@ void rotateCallback(const std_msgs::Float32 angle){
     t0 = ros::Time::now().toSec();
 
     if(angle.data > 0){
-        speed = -angular_speed;
+        speed = angular_speed * -1;
     } else if(angle.data < 0){
         speed = angular_speed;
     }
@@ -54,7 +56,7 @@ void rotateCallback(const std_msgs::Float32 angle){
     std::stringstream ss;
     ss << "done";
     msg.data = ss.str();
-    pub2.publish(msg);
+    //pub2.publish(msg);
 }
 
 int main(int argc, char **argv){
