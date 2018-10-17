@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import socket
-ip = '192.168.0.103'
+ip = '192.168.1.13'
 port = 3333 
 addr = ((ip,port)) 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
