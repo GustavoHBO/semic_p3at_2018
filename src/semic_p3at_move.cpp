@@ -52,7 +52,7 @@ int main(int argc, char** argv){
             std::stringstream ss;
             ss << "done";
             msg.data = ss.str();
-            pub2.publish(msg);
+            //pub2.publish(msg);
         } 
         ros::spinOnce();
     }

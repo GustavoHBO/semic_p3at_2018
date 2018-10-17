@@ -17,7 +17,7 @@ double abs(double data){
 }
 
 void rotateCallback(const std_msgs::Float32 angle){
-    double speedValue = 50;
+    double speedValue = 40;
     double speed = speedValue;
     double relative_angle = 0;
     double angular_speed = 0;
@@ -40,7 +40,7 @@ void rotateCallback(const std_msgs::Float32 angle){
         speed = angular_speed;
     }
 
-    while(current_angle < relative_angle && ros::ok()){
+    while(current_angle <= relative_angle && ros::ok()){
         twist.angular.x = 0;
         twist.angular.y = 0;
         twist.angular.z = speed;
