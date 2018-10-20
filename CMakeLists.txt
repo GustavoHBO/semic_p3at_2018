@@ -205,3 +205,10 @@ target_link_libraries(semic_p3at_move ${catkin_LIBRARIES})
 
 add_executable(semic_p3at_trajectory src/semic_p3at_trajectory.cpp)
 target_link_libraries(semic_p3at_trajectory ${catkin_LIBRARIES})
+
+add_executable(teste_service_server src/teste.cpp)
+target_link_libraries(teste_service_server ${catkin_LIBRARIES})
+
+add_executable(teste_service_client src/teste2.cpp)
+target_link_libraries(teste_service_client ${catkin_LIBRARIES})
+
