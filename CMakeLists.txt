@@ -198,9 +198,10 @@ include_directories(
 # catkin_add_nosetests(test)
 
 add_executable(semic_p3at_rotate src/semic_p3at_rotate.cpp)
-add_dependencies(semic_p3at_rotate chapter2_tutorials_generate_messages_cpp)
 target_link_libraries(semic_p3at_rotate ${catkin_LIBRARIES})
 
 add_executable(semic_p3at_move src/semic_p3at_move.cpp)
-add_dependencies(semic_p3at_move chapter2_tutorials_generate_messages_cpp)
 target_link_libraries(semic_p3at_move ${catkin_LIBRARIES})
+
+add_executable(state_publisher_tutorials src/robot_control.cpp)
+target_link_libraries(state_publisher_tutorials ${catkin_LIBRARIES})
