@@ -1,0 +1,7 @@
+unch>
+  <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
+  <include file="/home/gustavo/Documents/Workspace/ROS/dev/catkin_ws/src/semic_p3at_2018/Gazebo Project/World/empty_world.launch">
+    <arg name="world_name" value="$(find semic_p3at_2018)/Gazebo\ Project/World/labotec.world"/>
+    <!-- more default parameters can be changed here -->
+  </include>
+</launch>
