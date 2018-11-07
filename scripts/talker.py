@@ -47,8 +47,8 @@ def talker():
     #while not rospy.is_shutdown():
     rospy.loginfo('Publicando')
     angulo = Int16(90.0)
-    system.call(["rostopic", ' pub -1 /semic/p3at/rotate std_msgs/Int16 \"data: 90\"'])
-    #pub.publish(angulo)
+    #system.call(["rostopic", ' pub -1 /semic/p3at/rotate std_msgs/Int16 \"data: 90\"'])
+    pub.publish(angulo)
     #rate.sleep(3000)
 
 

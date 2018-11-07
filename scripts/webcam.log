@@ -13,3 +13,21 @@ INFO:root:faces: 1 at 2018-10-11 16:18:44.431281
 INFO:root:faces: 1 at 2018-10-11 16:18:49.706897
 INFO:root:faces: 1 at 2018-10-11 16:18:55.901345
 INFO:root:faces: 1 at 2018-10-11 16:25:19.580064
+INFO:rospy.core:signal_shutdown [atexit]
+INFO:root:faces: 1 at 2018-10-15 21:26:00.011149
+INFO:rospy.core:signal_shutdown [atexit]
+INFO:rospy.core:signal_shutdown [atexit]
+INFO:rospy.core:signal_shutdown [atexit]
+INFO:rospy.core:signal_shutdown [atexit]
+INFO:root:faces: 1 at 2018-10-15 21:26:11.226005
+INFO:rospy.core:signal_shutdown [atexit]
+INFO:rospy.core:signal_shutdown [atexit]
+INFO:root:faces: 1 at 2018-10-15 21:26:21.344759
+INFO:rospy.core:signal_shutdown [atexit]
+INFO:root:faces: 1 at 2018-10-15 21:26:23.653044
+INFO:rospy.core:signal_shutdown [atexit]
+INFO:root:faces: 1 at 2018-10-15 21:26:27.585944
+INFO:rospy.core:signal_shutdown [atexit]
+INFO:root:faces: 1 at 2018-10-15 21:26:29.653814
+INFO:rospy.core:signal_shutdown [atexit]
+INFO:rospy.core:signal_shutdown [atexit]
