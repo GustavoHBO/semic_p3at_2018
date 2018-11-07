@@ -203,5 +203,5 @@ target_link_libraries(semic_p3at_rotate ${catkin_LIBRARIES})
 add_executable(semic_p3at_move src/semic_p3at_move.cpp)
 target_link_libraries(semic_p3at_move ${catkin_LIBRARIES})
 
-add_executable(state_publisher_tutorials src/robot_control.cpp)
-target_link_libraries(state_publisher_tutorials ${catkin_LIBRARIES})
+add_executable(state_publisher src/robot_control.cpp)
+target_link_libraries(state_publisher ${catkin_LIBRARIES})
