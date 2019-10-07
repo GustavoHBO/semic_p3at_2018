@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 import cv2
+import picamera
+import os
 import rospy
 import subprocess as system
 from std_msgs.msg import Int16
@@ -25,6 +27,7 @@ class FaceDetection:
         self.faceCascade = cv2.CascadeClassifier(cascPath)
         log.basicConfig(filename='webcam.log',level=log.INFO)
         self.video_capture = cv2.VideoCapture(0)
+	self.pi_camera = picamera.PiCamera()
         self.anterior = 0
         self.abertHor = 62.2
         self.col = [0,0,0,0,0]
@@ -81,9 +84,10 @@ class FaceDetection:
             pass
 
         # Capture frame-by-frame
-        ret, frame = self.video_capture.read()
-
-        #frame = cv2.imread('img.jpg')
+	#ret, frame = self.video_capture.read()
+	self.pi_camera.capture('temp.jpg')
+        frame = cv2.imread('temp.jpg')
+	os.remove('temp.jpg')
 
         self.height, self.width = frame.shape[:2]
         print("Lagura: " + str(self.width) + " Altura: "+ str(self.height))
@@ -112,8 +116,8 @@ class FaceDetection:
         cv2.imwrite("img_detect.jpg", frame)
 
         # Libera a camera
-        self.video_capture.release()
-        cv2.destroyAllWindows()
+        #self.video_capture.release()
+        #cv2.destroyAllWindows()
         return angulo
 
         
@@ -165,7 +169,10 @@ pub = ROS_Publisher()
 
 def callback(data):
     global anguloGiro
-    cliente = Cliente('127.0.0.1', 3333)
+    try:
+       cliente = Cliente('127.0.0.1', 3333)
+    except:
+       print("Server not found")
     face = FaceDetection('/usr/local/share/OpenCV/haarcascades/haarcascade_frontalface_default.xml')
 
     anguloGiro = face.capturar()
@@ -190,7 +197,8 @@ def callback(data):
     #sub.publisher('END')
     cliente.fechar()
 
-sub = ROS_Listener(callback)
+callback(' ')
+#sub = ROS_Listener(callback)
 
 
 
